@@ -12,7 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Versioning;
- 
+using MCT_BACKEND4.Configuration;
+using MCT_BACKEND4.Data;
 
 namespace RegistrationAPI
 {
@@ -28,10 +29,12 @@ namespace RegistrationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-        
-           
             
+            // Connectiestrings
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
  
+            // Context
+            services.AddDbContext<RegistrationContext>();
         
             services.AddControllers();
  
