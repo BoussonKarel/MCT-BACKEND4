@@ -4,14 +4,16 @@ using MCT_BACKEND4.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace RegistrationAPI.Migrations
 {
     [DbContext(typeof(RegistrationContext))]
-    partial class RegistrationContextModelSnapshot : ModelSnapshot
+    [Migration("20210304162526_model")]
+    partial class model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,12 +37,12 @@ namespace RegistrationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            VaccinTypeId = new Guid("e0b80ec0-5f8f-4afd-b42e-b4b82e19aaf1"),
+                            VaccinTypeId = new Guid("15469f07-e61f-42e5-8bc3-fb9a84531f4a"),
                             Name = "BioNTech, Pfizer"
                         },
                         new
                         {
-                            VaccinTypeId = new Guid("360da854-3053-4301-a674-dd77c27fc080"),
+                            VaccinTypeId = new Guid("6ee76ca4-dc0c-411d-b351-9a7a8c087562"),
                             Name = "Spoetnik"
                         });
                 });
@@ -61,17 +63,17 @@ namespace RegistrationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            VaccinationLocationId = new Guid("80ff9490-6bc6-49dc-9691-d63d31821936"),
+                            VaccinationLocationId = new Guid("30eb8f30-24f6-4048-bd42-d067ac8b466e"),
                             Name = "Kortrijk Expo"
                         },
                         new
                         {
-                            VaccinationLocationId = new Guid("1867d3df-a0dc-4c87-9aa5-1329336b4bc7"),
+                            VaccinationLocationId = new Guid("ae77c2c3-7c69-4dd1-a5d4-00e34fe0f7ac"),
                             Name = "Vaccinarium Brugge"
                         },
                         new
                         {
-                            VaccinationLocationId = new Guid("518dc1c9-b34a-4f47-ab46-0d4bc1b3868e"),
+                            VaccinationLocationId = new Guid("444b1a8e-e307-4d28-b578-8bc28432053c"),
                             Name = "De Penta"
                         });
                 });
