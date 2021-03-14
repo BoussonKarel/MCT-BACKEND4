@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RegistrationAPI.Migrations
 {
     [DbContext(typeof(RegistrationContext))]
-    [Migration("20210304144303_first")]
-    partial class first
+    [Migration("20210314125502_first migration")]
+    partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,19 @@ namespace RegistrationAPI.Migrations
 
                     b.HasKey("VaccinTypeId");
 
-                    b.ToTable("VaccinType");
+                    b.ToTable("VaccinTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            VaccinTypeId = new Guid("6439d094-1ae8-4955-a870-26d4c226fe31"),
+                            Name = "BioNTech, Pfizer"
+                        },
+                        new
+                        {
+                            VaccinTypeId = new Guid("80b85b82-466d-4206-8933-ab568d099739"),
+                            Name = "Spoetnik"
+                        });
                 });
 
             modelBuilder.Entity("RegistrationAPI.Models.VaccinationLocation", b =>
@@ -47,6 +59,23 @@ namespace RegistrationAPI.Migrations
                     b.HasKey("VaccinationLocationId");
 
                     b.ToTable("VaccinationLocations");
+
+                    b.HasData(
+                        new
+                        {
+                            VaccinationLocationId = new Guid("6c371d77-1e54-40aa-b453-c32f296bdf41"),
+                            Name = "Kortrijk Expo"
+                        },
+                        new
+                        {
+                            VaccinationLocationId = new Guid("444b7960-dc17-44bf-bbf9-4dd6970e871b"),
+                            Name = "Vaccinarium Brugge"
+                        },
+                        new
+                        {
+                            VaccinationLocationId = new Guid("c8992af9-307e-486a-8ee4-25e8e7fa6396"),
+                            Name = "De Penta"
+                        });
                 });
 
             modelBuilder.Entity("RegistrationAPI.Models.VaccinationRegistration", b =>
@@ -81,7 +110,20 @@ namespace RegistrationAPI.Migrations
 
                     b.HasKey("VaccinationRegistrationId");
 
+                    b.HasIndex("VaccinTypeId");
+
                     b.ToTable("VaccinationRegistrations");
+                });
+
+            modelBuilder.Entity("RegistrationAPI.Models.VaccinationRegistration", b =>
+                {
+                    b.HasOne("RegistrationAPI.Models.VaccinType", "VaccinType")
+                        .WithMany()
+                        .HasForeignKey("VaccinTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VaccinType");
                 });
 #pragma warning restore 612, 618
         }

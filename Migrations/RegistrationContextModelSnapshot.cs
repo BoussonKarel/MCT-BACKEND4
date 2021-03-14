@@ -30,17 +30,17 @@ namespace RegistrationAPI.Migrations
 
                     b.HasKey("VaccinTypeId");
 
-                    b.ToTable("VaccinType");
+                    b.ToTable("VaccinTypes");
 
                     b.HasData(
                         new
                         {
-                            VaccinTypeId = new Guid("e0b80ec0-5f8f-4afd-b42e-b4b82e19aaf1"),
+                            VaccinTypeId = new Guid("6439d094-1ae8-4955-a870-26d4c226fe31"),
                             Name = "BioNTech, Pfizer"
                         },
                         new
                         {
-                            VaccinTypeId = new Guid("360da854-3053-4301-a674-dd77c27fc080"),
+                            VaccinTypeId = new Guid("80b85b82-466d-4206-8933-ab568d099739"),
                             Name = "Spoetnik"
                         });
                 });
@@ -61,17 +61,17 @@ namespace RegistrationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            VaccinationLocationId = new Guid("80ff9490-6bc6-49dc-9691-d63d31821936"),
+                            VaccinationLocationId = new Guid("6c371d77-1e54-40aa-b453-c32f296bdf41"),
                             Name = "Kortrijk Expo"
                         },
                         new
                         {
-                            VaccinationLocationId = new Guid("1867d3df-a0dc-4c87-9aa5-1329336b4bc7"),
+                            VaccinationLocationId = new Guid("444b7960-dc17-44bf-bbf9-4dd6970e871b"),
                             Name = "Vaccinarium Brugge"
                         },
                         new
                         {
-                            VaccinationLocationId = new Guid("518dc1c9-b34a-4f47-ab46-0d4bc1b3868e"),
+                            VaccinationLocationId = new Guid("c8992af9-307e-486a-8ee4-25e8e7fa6396"),
                             Name = "De Penta"
                         });
                 });

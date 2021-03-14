@@ -11,6 +11,7 @@ using System.Globalization;
 using Microsoft.Extensions.Options;
 using MCT_BACKEND4.Data;
 using Microsoft.EntityFrameworkCore;
+using MCT_BACKEND4.Services;
 
 namespace RegistrationAPI.Controllers
 {
@@ -19,40 +20,34 @@ namespace RegistrationAPI.Controllers
     [ApiController] 
     public class VaccinatieController : ControllerBase
     {
-        private RegistrationContext _context;
-        public VaccinatieController(RegistrationContext context)
+        private IRegistrationService _registrationService;
+        public VaccinatieController(IRegistrationService RegistrationService)
         {
-            _context = context;
-        }
-
-
-        [HttpGet]
-        [Route("/locations")]
-        public async Task<List<VaccinationLocation>> GetLocationsAsync(){
-            return await _context.VaccinationLocations.ToListAsync();
+            _registrationService = RegistrationService;
         }
 
         [HttpGet]
         [Route("/vaccins")]
         public async Task<List<VaccinType>> GetVaccinsAsync(){
-            return await _context.VaccinType.ToListAsync();
+            return await _registrationService.GetVaccinTypes();
+        }
+
+        [HttpGet]
+        [Route("/locations")]
+        public async Task<List<VaccinationLocation>> GetLocationsAsync(){
+            return await _registrationService.GetVaccinationLocations();
         }
 
         [HttpGet]
         [Route("/registrations")]
-        public async Task<ActionResult<List<VaccinationRegistration>>> GetRegistrationsAsync(string date = "", bool includeVaccin = false){
-            if (!string.IsNullOrWhiteSpace(date)) {
-                if (includeVaccin) {
-                    // Doesn't work... yet?
-                    return await _context.VaccinationRegistrations.Where(r => r.VaccinationDate == date).Include(r => r.VaccinType).ToListAsync();
-                }
-                else {
-                    return await _context.VaccinationRegistrations.Where(r => r.VaccinationDate == date).ToListAsync();
-                }
-                
+        public async Task<ActionResult<List<VaccinationRegistration>>> GetRegistrations(string date="", bool includeVaccin = false) {
+            try
+            {
+                return await _registrationService.GetVaccinationRegistrations(date, includeVaccin);
             }
-            else {
-                return await _context.VaccinationRegistrations.ToListAsync();
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
             }
         }
 
@@ -62,9 +57,8 @@ namespace RegistrationAPI.Controllers
             try
             {
                 registration.VaccinationRegistrationId = Guid.NewGuid();
-                await _context.VaccinationRegistrations.AddAsync(registration);
-                await _context.SaveChangesAsync();
-                return registration;
+                await _registrationService.AddVaccinationRegistration(registration);
+                return new OkObjectResult(registration);
             }
             catch (Exception ex)
             {

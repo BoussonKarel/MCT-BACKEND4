@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using MCT_BACKEND4.Configuration;
 using MCT_BACKEND4.Data;
+using MCT_BACKEND4.Repositories;
+using MCT_BACKEND4.Services;
 
 namespace RegistrationAPI
 {
@@ -30,13 +32,24 @@ namespace RegistrationAPI
         public void ConfigureServices(IServiceCollection services)
         {
             
-            // Connectiestrings
+            // Configuratie zoals connectiestrings, email settings
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
  
             // Context
             services.AddDbContext<RegistrationContext>();
         
             services.AddControllers();
+
+            // Context
+            services.AddTransient<IRegistrationContext,RegistrationContext>();
+            // Repositories
+            services.AddTransient<IVaccinTypeRepository,VaccinTypeRepository>();
+            services.AddTransient<IVaccinationLocationRepository,VaccinationLocationRepository>();
+            services.AddTransient<IVaccinationRegistrationRepository,VaccinationRegistrationRepository>();
+            // Services
+            services.AddTransient<IRegistrationService,RegistrationService>();
+            services.AddTransient<IMailService, MailService>();
  
  
             services.AddSwaggerGen(c =>

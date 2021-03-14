@@ -27,3 +27,10 @@ services:
       - db
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+  mailserver:
+    image: ghusta/fakesmtp
+    ports: 
+      - '2525:25'
+    volumes: 
+      - ./mails:/var/mail
+    
