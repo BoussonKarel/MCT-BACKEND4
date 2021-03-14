@@ -1,17 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RegistrationAPI.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Globalization;
-using Microsoft.Extensions.Options;
-using MCT_BACKEND4.Data;
-using Microsoft.EntityFrameworkCore;
 using MCT_BACKEND4.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace RegistrationAPI.Controllers
 {
@@ -21,9 +14,11 @@ namespace RegistrationAPI.Controllers
     public class VaccinatieController : ControllerBase
     {
         private IRegistrationService _registrationService;
-        public VaccinatieController(IRegistrationService RegistrationService)
+        private IMemoryCache _cache;
+        public VaccinatieController(IRegistrationService RegistrationService, IMemoryCache cache)
         {
             _registrationService = RegistrationService;
+            _cache = cache;
         }
 
         [HttpGet]
@@ -33,9 +28,19 @@ namespace RegistrationAPI.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 10, Location = ResponseCacheLocation.Any)] // HTTP Response cachen (10 seconden)
         [Route("/locations")]
         public async Task<List<VaccinationLocation>> GetLocationsAsync(){
-            return await _registrationService.GetVaccinationLocations();
+            List<VaccinationLocation> locations;
+
+            _cache.TryGetValue<List<VaccinationLocation>>("locations", out locations);
+            if (locations == null) {
+                locations = await _registrationService.GetVaccinationLocations();
+                _cache.Set<List<VaccinationLocation>>("locations", locations, DateTime.Now.AddSeconds(10));
+                // 10 seconden id memory cache
+            }
+
+            return locations;
         }
 
         [HttpGet]

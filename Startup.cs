@@ -31,6 +31,9 @@ namespace RegistrationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Caching
+            services.AddResponseCaching();
+            services.AddMemoryCache();
             
             // Configuratie zoals connectiestrings, email settings
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
@@ -73,6 +76,9 @@ namespace RegistrationAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Caching
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
